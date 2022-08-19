@@ -22,6 +22,7 @@
   "homepage": "https://github.com/elliotcs30/restaurant-list-express#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "express-handlebars": "^4.0.2",
     "mongoose": "^6.0.4"
   }
 }
