@@ -48,11 +48,16 @@
     </button>
   </a>
 
+  <form action="/restaurants/{{ restaurant._id }}/delete" method="POST" style="display: inline;">
+    <button type="submit" class="btn btn-danger">刪除</button>
+  </form>
+
   <a href="/">
     <button type="button" class="btn btn-outline btn-primary">
       回到首頁
     </button>
   </a>
+
 </div>
 
 

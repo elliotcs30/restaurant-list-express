@@ -9,6 +9,7 @@ const app = express()
 
 // require mongoose
 const mongoose = require('mongoose') 
+const restaurant = require('./models/restaurant')
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }) // setting connect to mongoDB
 
 // get mongoDB connect state
@@ -74,6 +75,15 @@ app.post('/restaurants/:id/edit', (req, res) => {
   Restaurant.findByIdAndUpdate(id, req.body) //找到對應的資料後整個一起更新
     .then(() => res.redirect(`/restaurants/${id}`))
     .catch(err => console.log(err))
+})
+
+// 刪除資料 delete 路由
+app.post('/restaurants/:id/delete', (req, res) => {
+  const id = req.params.id
+  return Restaurant.findById( id )
+    .then(restaurant => restaurant.remove())
+    .then(() => res.redirect('/'))
+    .catch(err => console.error(err))
 })
 
 // start and listen on the Express server
