@@ -1,6 +1,8 @@
 // 載入 express 並建構應用程式伺服器
 const express = require('express')
 const exphbs = require('express-handlebars')
+// 載入 Restaurant model
+const Restaurant = require('./models/restaurant')
 
 const app = express()
 
@@ -27,7 +29,10 @@ app.use(express.static('public'))
 
 // 設定首頁路由
 app.get('/', (req, res) => {
-  res.render('index')
+  Restaurant.find() // 取出 Restaurant model 裡面所有的資料
+    .lean() // 把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
+    .then(restaurants => res.render('index', { restaurants })) // 將資料傳給 index 樣板
+    .catch(error => console.error(error)) // 錯誤處理
 })
 
 // 設定 port 3000
