@@ -51,6 +51,14 @@ app.post('/restaurants', (req, res) => {
     .catch(error => console.log(error))
 })
 
+app.get('/restaurants/:id', (req, res) => {
+  const id = req.params.id
+  return Restaurant.findById( id )
+    .lean()
+    .then(restaurant => res.render('detail', { restaurant }))
+    .catch(err => console.error(err))
+})
+
 // start and listen on the Express server
 app.listen(3000, () => {
   console.log('App is running on http://localhost:3000')
