@@ -59,6 +59,23 @@ app.get('/restaurants/:id', (req, res) => {
     .catch(err => console.error(err))
 })
 
+app.get('/restaurants/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Restaurant.findById(id)
+    .lean()
+    .then(restaurant => res.render('edit', { restaurant }))
+    .catch(err => console.error(err))
+})
+
+// 更新資料 edit 路由，更新完資料後將資料送給資料庫
+app.post('/restaurants/:id/edit', (req, res) => {
+  const id = req.params.id
+  
+  Restaurant.findByIdAndUpdate(id, req.body) //找到對應的資料後整個一起更新
+    .then(() => res.redirect(`/restaurants/${id}`))
+    .catch(err => console.log(err))
+})
+
 // start and listen on the Express server
 app.listen(3000, () => {
   console.log('App is running on http://localhost:3000')
