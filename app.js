@@ -8,8 +8,7 @@ const Restaurant = require('./models/restaurant')
 const app = express()
 
 // require mongoose
-const mongoose = require('mongoose') 
-const restaurant = require('./models/restaurant')
+const mongoose = require('mongoose')
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }) // setting connect to mongoDB
 
 // get mongoDB connect state
@@ -37,6 +36,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.get('/', (req, res) => {
   Restaurant.find() // get Restaurant model all data
     .lean() //  Mongoose Model object send clear JavaScript data array
+    .sort({ _id : 'asc' }) // 升冪'asc', 降冪'desc'
     .then(restaurants => res.render('index', { restaurants })) // mongoDB send data to index template
     .catch(error => console.error(error)) // handle error
 })
