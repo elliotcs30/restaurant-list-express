@@ -5,23 +5,11 @@ const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 // 引用路由器
 const routes = require('./routes')
+require('./config/mongoose')
 
 const app = express()
 
-// require mongoose
-const mongoose = require('mongoose')
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }) // setting connect to mongoDB
 
-// get mongoDB connect state
-const db = mongoose.connection
-// connect error
-db.on('error', () => {
-  console.log('mongodb error!')
-})
-// connect success
-db.once('open', () => {
-  console.log('mongodb connected!')
-})
 
 // setting template engine
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
