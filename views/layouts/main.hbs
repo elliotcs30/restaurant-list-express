@@ -24,10 +24,12 @@
           我的餐廳清單
         </a>
 
-        <a href="/restaurants/new"><button
+        {{#if isAuthenticated}}
+          <a href="/restaurants/new"><button
             class="btn btn-primary"
           >新增餐廳</button></a>
-          
+        {{/if}}
+        
         {{#if isAuthenticated}}
           <a href="/users/logout" class="btn btn-danger">登出</a>
         {{else}}
@@ -35,7 +37,9 @@
         {{/if}}
       </div>
     </nav>
-    <div class="banner"></div>
+    {{#if isAuthenticated}}
+      <div class="banner"></div>
+    {{/if}}
   </header>
 
   <!-- partial templates will replace the part of "body" here -->
