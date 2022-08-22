@@ -6,8 +6,10 @@ const Restaurant = require('../../models/restaurant')
 
 // 定義首頁路由
 router.get('/', (req, res) => {
+  const userId = req.user._id
+
   // get Restaurant model all data
-  Restaurant.find() 
+  Restaurant.find({ userId }) 
     .lean() //  Mongoose Model object send clear JavaScript data array
     .sort({ _id : 'asc' }) // 升冪'asc', 降冪'desc'
     .then(restaurants => res.render('index', { restaurants })) // mongoDB send data to index template
