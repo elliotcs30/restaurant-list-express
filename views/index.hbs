@@ -35,12 +35,11 @@
                   {{ rating }}
                   <i class="fas fa-star fa-xs"></i>
                 </span>
-
               </div>
 
               <div class="card-footer text-muted text-right">
-                <a href="./restaurants/{{ this._id }}" class="btn btn-link">詳細資訊</a>
-                <a href="./restaurants/{{ this._id }}/edit" class="btn btn-link">編輯</a>
+                <a href="./restaurants/{{ this._id }}" class="btn btn-secondary">詳細資訊</a>
+                <a href="./restaurants/{{ this._id }}/edit" class="btn btn-success">編輯</a>
                 <!-- <a> 只能發 GET 請求，所以這裡需要用 <form> -->
                 <form action="./restaurants/{{ this._id }}?_method=DELETE" method="POST" style="display: inline;">
                   <button type="submit" class="btn btn-danger">刪除</button>
