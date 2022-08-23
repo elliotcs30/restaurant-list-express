@@ -12,3 +12,6 @@ Desktop.ini
 node_modules
 *.log
 *.gz
+
+# 敏感資訊與環境變數
+.env
