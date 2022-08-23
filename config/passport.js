@@ -1,6 +1,8 @@
+const bcrypt = require('bcryptjs')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const User = require('../models/user')
+
 module.exports = app => {
   // 初始化 Passport 模組
   app.use(passport.initialize())
@@ -9,7 +11,8 @@ module.exports = app => {
   passport.use(
     new LocalStrategy(
       // 預設使用 username 和 password 作為驗證的欄位
-      { usernameField: 'email',
+      { 
+        usernameField: 'email',
         passportField: 'password',
         passReqToCallback: true, // 如果需要在 verify callback 中取得 req
       }, 
@@ -17,7 +20,7 @@ module.exports = app => {
       // 因為上面有註明 passReqToCallback: true，所以第一個參數會是 req
       async (req, email, password, done) => {
         try {
-          const user = await User.findOne({ email, password })
+          const user = await User.findOne({ email })
 
           // 驗證 email、password 任一失敗，且顯示錯誤訊息
           if (!user) {
@@ -28,8 +31,14 @@ module.exports = app => {
             );
           }
 
-          // 驗證 email、password 成功，且顯示登入訊息
-          return done(null, user, req.flash('success_msg', '登入成功'))
+          return bcrypt.compare(password, user.password).then(isMatch => {
+            if (!isMatch) {
+              return done(null, false, { message: '帳號或密碼輸入錯誤' })
+            }
+            
+            // 驗證 email、password 成功，且顯示登入訊息
+            return done(null, user, req.flash('success_msg', '登入成功'))
+          })
         } catch (err) {
           return done(err)
         }
