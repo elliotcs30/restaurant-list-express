@@ -10,20 +10,10 @@ const User = require('../user')
 const userList = require('../../userList.json').users
 const db = require('../../config/mongoose')
 
-
-for (let i = 0; i < userList.length; i++) {
-  const SEED_USER = userList[i]
-
+userList.map(SEED_USER => {
   db.once('open', () => {
     console.log('mongodb connected!')
-
-    // Promise.all([func1, func2, func3, ...])
-    //   .then(results => {
-    //     console.log(results)
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //   })
+    
     Promise.all([
       bcrypt
       .genSalt(10)
@@ -34,22 +24,30 @@ for (let i = 0; i < userList.length; i++) {
         password: hash
       }))
       .then(user => {
+        // 取得已建立完成的 user id (要做關聯資料表)
         const userId = user._id
+        // 取得 user 種子資料編號要建立的餐廳數量
         const restaurantId = SEED_USER.restaurantId
-  
-        restaurantId.map(id => {
+
+        // 這邊設定 userRestaurants 接收 restaurant 的餐廳資訊
+        // 一定要加上 return 把 restaurant 回傳, 不然會無法建立 restaurant 資料
+        const userRestaurants = restaurantId.map(id => {
           const restaurant = restaurantList[id]
+
+          // 因為 restaurant 使用 const
+          // 所以用以下方式將從資料表取得的 user id 覆值給 restaurant 的 userId
           restaurant.userId = userId
-          return Restaurant.create(restaurant)
+          return restaurant
         })
+
+        // 建立 restaurant 資料
+        return Restaurant.create(userRestaurants)
       })
-      
-    ]).then(() => {
-      console.log('done.')
-      process.exit()
-    })
+      .then(() => {
+        console.log('done.')
+        // 關閉 DB 連線
+        process.exit()
+      })
+    ])
   })
-  
-}
-
-
+})
